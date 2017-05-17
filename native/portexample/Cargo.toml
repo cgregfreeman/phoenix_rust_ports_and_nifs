@@ -12,3 +12,7 @@ crate-type = ["dylib"]
 rustler = "0.14.0"
 rustler_codegen = "0.14.0"
 lazy_static = "0.2"
+
+[[bin]]
+name = "portexample"
+path = "src/lib.rs"

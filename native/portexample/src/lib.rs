@@ -1,7 +1,7 @@
 
 use std::env;
 
-fn portexample() {
+fn main() {
     println!("hello world");
 //    for argument in env::args() {
 //        println!("argument: {:?}", argument)

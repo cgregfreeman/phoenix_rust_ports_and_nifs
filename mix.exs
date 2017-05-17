@@ -31,6 +31,7 @@ defmodule PhoenixRustPortsAndNifs.Mixfile do
     [portexample: [
       path: "native/portexample",
       mode: (if Mix.env == :prod, do: :release, else: :debug),
+
        ]]
   end
 
