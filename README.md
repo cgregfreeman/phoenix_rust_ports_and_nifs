@@ -154,3 +154,19 @@ iex(2)> Example.testMap()
 
 ```
 Notice also that the map entries are ordered differently than how they were put in Elixir. So building your interface will require match terms to properly pull data from the maps if this is how you want to use Rustler.
+
+
+## Port Example
+
+This is a very basic port example. Pay close attention to both the Elixir and Rust code. Newlines are necessary for the read_line command in rust to work properly. So, Elixir must send a newline command for Rust to respond in this case.
+
+So there's a gap following a printout of what was sent by elixir to Rust. There's not a newline in the rust output because the print! command is used instead of the println! command.
+```Elixir
+iex(1)> PortExample.test()
+Input sent to rust: Hello World!
+
+"Received in Rust: Hello World!"
+true
+iex(2)> 
+
+```

@@ -20,7 +20,7 @@ defmodule PhoenixRustPortsAndNifs.Mixfile do
   def application do
     [mod: {PhoenixRustPortsAndNifs, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, ]]
   end
 
   defp rustler_crates() do
