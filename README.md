@@ -35,16 +35,11 @@ Example
 Create the elixir file in lib/ that will interface with the rustler Nif. Note that the @on_load line is commented out as it currently causes an elixir compilation error.
 
 ```Elixir
-defmodule Example do
-    use Rustler, otp_app: :phoenix_rustler_integration, crate: :example
+defmodule NifExample do
+ use Rustler, otp_app: :phoenix_rust_ports_and_nifs, crate: :nifexample
 
-#    @on_load :load_nif
-    def load_nif do
-        Rustler.load_nif("example")
-    end
 
-    # When your NIF is loaded, it will override this function.
-    def add(_a, _b), do: throw :nif_not_loaded
+ def add(_a, _b), do: exit(:nif_not_loaded)
 end
 ```
 
@@ -73,38 +68,38 @@ Modify the web/mix.exs so that the :rustler term is included in the compilers li
   end
 
   defp rustler_crates() do
-    [example: [
-      path: "native/example",
+    [nifexample: [
+      path: "native/nifexample",
       mode: (if Mix.env == :prod, do: :release, else: :debug),
-      ]]
+       ]]
 
   end
 ```
 You should then be able to run iex -S mix and perform the following:
 ```Elixir
-iex(1)> Example.add(1,1)
+iex(1)> NifExample.add(1,1)
 {:ok, 2}
 
 ```
 More examples were added to show the basics of how to get information from Elixir in the form of Tuples and Maps.
 These are the testTuple() and testMap() functions: 
 ```Elixir
-def printTuple(_tuple), do: throw :nif_not_loaded
-def testTuple() do
-  tuple = {:im_an_atom, 1.0, 1, "string"}
-  printTuple(tuple)
-end
+    def printTuple(_tuple), do: exit(:nif_not_loaded)
+    def testTuple() do
+      tuple = {:im_an_atom, 1.0, 1, "string"}
+      printTuple(tuple)
+    end
 
-def printMap(_map), do: throw :nif_not_loaded
+    def printMap(_map), do: exit(:nif_not_loaded)
 
-def testMap() do
-  map = %{"firstEntry" => 1,
-  "secondEntry" => :second,
-  :third => 3.0,
-  4 => "fourthEntry",
-  "fifthEntry" => "five"}
-  printMap(map)
-end
+    def testMap() do
+        map = %{"firstEntry" => 1,
+        "secondEntry" => :second,
+        :third => 3.0,
+        4 => "fourthEntry",
+        "fifthEntry" => "five"}
+        printMap(map)
+    end
 ```
 These are a basic collection of several different types in the Tuple and Map.
 
@@ -141,10 +136,10 @@ fn print_map<'a>(env: NifEnv<'a>, args: &[NifTerm<'a>]) -> NifResult<NifTerm<'a>
 
 These functions can be called by iex -S mix after modifying the Example.ex and the rust lib.rs as shown above. This results in: 
 ```Elixir
-iex(1)> Example.testTuple()
+iex(1)> NifExample.testTuple()
 Atom: im_an_atom, Float: 1, Integer: 1, String: string
                                                       :ok
-iex(2)> Example.testMap()
+iex(2)> NifExample.testMap()
 (4, <<"fourthEntry">>)
                       (third, 3.000000e+00)
                                            (<<"fifthEntry">>, <<"five">>)
